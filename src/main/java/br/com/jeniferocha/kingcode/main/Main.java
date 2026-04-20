@@ -2,6 +2,8 @@ package br.com.jeniferocha.kingcode.main;
 
 import br.com.jeniferocha.kingcode.model.Livro;
 import br.com.jeniferocha.kingcode.model.RespostaAPI;
+import br.com.jeniferocha.kingcode.model.RespostaVilao;
+import br.com.jeniferocha.kingcode.model.Vilao;
 import br.com.jeniferocha.kingcode.service.ConsumoAPI;
 import br.com.jeniferocha.kingcode.service.ConverteDados;
 import org.springframework.stereotype.Component;
@@ -32,7 +34,7 @@ public class Main {
                 case 2 -> pesquisaLivro();
                 case 3 -> livroPorAnoDeLancamento();
                 case 4 -> buscaDetalhesVilao();
-                case 0 -> System.out.println("Saindo do Macroverso... Até a próxima!");
+                case 5 -> System.out.println("Saindo do Macroverso... Até a próxima!");
                 default -> System.out.println("Opção inválida! Tente novamente.");
             }
         }
@@ -94,6 +96,28 @@ public class Main {
     }
 
     public void buscaDetalhesVilao() {
+        carregarDadosSeVazio();
+        System.out.println("Digite o nome do vilão:");
+        var nomeVilao = leitura.nextLine();
 
+        // 1. Primeiro, achamos o vilão "resumido" na lista de livros
+        var vilaoResumo = livros.stream()
+                .filter(l -> l.viloes() != null)
+                .flatMap(l -> l.viloes().stream())
+                .filter(v -> v.nome().toLowerCase().contains(nomeVilao.toLowerCase()))
+                .findFirst(); // o primeiro que encontrar
+
+        if (vilaoResumo.isPresent()) {
+            // 2. Usamos a URL que veio no resumo para buscar os detalhes reais
+            var url = vilaoResumo.get().urlDetalhes();
+            var json = consumo.obterDados(url);
+            var resposta = conversor.obterDados(json, RespostaVilao.class);
+
+            // 3. Agora temos o vilão com Gênero e Status preenchidos!
+            System.out.println("\n--- Ficha Completa do Vilão ---");
+            System.out.println(resposta.vilao());
+        } else {
+            System.out.println("Vilão não encontrado no Macroverso.");
+        }
     }
 }
