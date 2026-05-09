@@ -1,6 +1,6 @@
 package br.com.jeniferocha.kingcode.service;
 
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class ConverteDados implements IConverteDados {

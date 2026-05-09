@@ -17,8 +17,6 @@ public class Main {
 
     private ConverteDados conversor = new ConverteDados();
 
-    List<DadosLivro> dados = new ArrayList<>();
-
     private final String ENDERECO = "https://stephen-king-api.onrender.com/api/books";
 
     public void buscarLivro() {
@@ -30,7 +28,7 @@ public class Main {
             leitura.nextLine();
 
             switch (opcaoMenu) {
-                case 1 -> System.out.println("test");
+                case 1 -> listaTodosOsLivros();
                 case 2 -> pesquisaLivro();
                 case 3 -> livroPorAnoDeLancamento();
                 case 4 -> buscaDetalhesVilao();
@@ -52,27 +50,26 @@ public class Main {
                 );
     }
 
-//    public void listaTodosOsLivros() {
-//        var json = consumo.obterDados(ENDERECO);
-//        var resposta = conversor.obterDados(json, RespostaAPI.class);
-//        this.livros = resposta.livros();
-//
-//        System.out.println("\n--- BIBLIOTECA STEPHEN KING ---");
-//        livros.forEach(System.out::println);
-//    }
+    public void listaTodosOsLivros() {
+        var json = consumo.obterDados(ENDERECO);
+        var resposta = conversor.obterDados(json, RespostaAPI.class);
+        System.out.println("\n--- LISTA DE TÍTULOS (Stephen King) ---");
 
-//    private void carregarDadosSeVazio() {
-//        if (this.livros.isEmpty()) {
-//            var json = consumo.obterDados(ENDERECO);
-//            var resposta = conversor.obterDados(json, RespostaAPI.class);
-//            this.livros = resposta.livros();
-//        }
-//    }
+        resposta.dadosLivroList().stream()
+                .map(DadosLivro::titulo)
+                .sorted()               //ordem alfabética
+                .forEach(System.out::println);
+    }
 
     public void pesquisaLivro() {
         DadosLivro dados = getDadosLivro();
-        Livro livro = new Livro(dados);
-        System.out.println(dados);
+
+        if (dados != null) {
+            Livro livro = new Livro(dados);
+            System.out.println(livro);
+        } else {
+            System.out.println("Livro não encontrado.");
+        }
     }
 
     private DadosLivro getDadosLivro() {
@@ -81,13 +78,12 @@ public class Main {
 
         System.out.println("\n--- Resultados da Busca ---");
 
-        var json = consumo.obterDados(ENDERECO + nomeLivro.replace(" ", "+"));
-        DadosLivro dados = conversor.obterDados(json, DadosLivro.class);
-        return dados;
-//        // Filtra e mostra apenas o que foi pedido
-//        livros.stream()
-//                .filter(l -> l.titulo().toLowerCase().contains(nomeLivro.toLowerCase()))
-//                .forEach(System.out::println);
+        var json = consumo.obterDados(ENDERECO);
+        var resposta = conversor.obterDados(json, RespostaAPI.class);
+        return resposta.dadosLivroList().stream()
+                .filter(l -> l.titulo().toLowerCase().contains(nomeLivro.toLowerCase()))
+                .findFirst()
+                .orElse(null);
     }
 
     public void livroPorAnoDeLancamento() {
@@ -95,15 +91,23 @@ public class Main {
         var anoLancamento = leitura.nextInt();
         leitura.nextLine();
 
+        var json = consumo.obterDados(ENDERECO);
+        var resposta = conversor.obterDados(json, RespostaAPI.class);
+
+        List<Livro> livrosEncontrados = resposta.dadosLivroList().stream()
+                .map(Livro::new)// // Converte o "pacote" da API para um objeto Livro com novas regras/formataçoes
+                .filter(l -> l.getAnoDeLancamento() != null && l.getAnoDeLancamento().equals(anoLancamento))
+                .toList();
         System.out.println("\n--- Livros lançados em " + anoLancamento + " ---");
 
-//        livros.stream()
-//                .filter(l -> l.ano().equals(anoLancamento))
-//                .forEach(System.out::println);
+        if (livrosEncontrados.isEmpty()) {
+            System.out.println("Nenhum livro encontrado para o ano " + anoLancamento + ".");
+        } else {
+            livrosEncontrados.forEach(System.out::println);
+        }
     }
 
     public void buscaDetalhesVilao() {
-        //carregarDadosSeVazio();
         System.out.println("Digite o nome do vilão:");
         var nomeVilao = leitura.nextLine();
 

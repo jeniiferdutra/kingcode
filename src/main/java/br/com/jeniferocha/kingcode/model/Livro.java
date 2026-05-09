@@ -1,10 +1,5 @@
 package br.com.jeniferocha.kingcode.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.util.List;
-
 public class Livro {
     private String titulo;
     private Integer anoDeLancamento;

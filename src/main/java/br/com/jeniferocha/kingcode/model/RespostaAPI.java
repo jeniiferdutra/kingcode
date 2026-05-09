@@ -6,5 +6,5 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record RespostaAPI(
-        @JsonAlias("data") List<Livro> livros
+        @JsonAlias("data") List<DadosLivro> dadosLivroList
 ) {}
