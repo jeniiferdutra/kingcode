@@ -5,19 +5,46 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public record Livro(
-        @JsonAlias("Title") String titulo,
-        @JsonAlias("Publisher") String editora,
-        @JsonAlias("Pages") Integer paginas,
-        @JsonAlias("Year") Integer ano,
-        @JsonAlias("villains") List<Vilao> viloes
-) {
+public class Livro {
+    private String titulo;
+    private Integer anoDeLancamento;
+    private Integer numeroDePaginas;
+
+    public Livro(DadosLivro dados) {
+        this.titulo = dados.titulo();
+        this.anoDeLancamento = dados.anodeLancamento();
+        this.numeroDePaginas = dados.numeroDePaginas();
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public Integer getAnoDeLancamento() {
+        return anoDeLancamento;
+    }
+
+    public void setAnoDeLancamento(Integer anoDeLancamento) {
+        this.anoDeLancamento = anoDeLancamento;
+    }
+
+    public Integer getNumeroDePaginas() {
+        return numeroDePaginas;
+    }
+
+    public void setNumeroDePaginas(Integer numeroDePaginas) {
+        this.numeroDePaginas = numeroDePaginas;
+    }
+
     @Override
     public String toString() {
-        return String.format(
-                "| Livro: %s | Editora: %s | Páginas: %4d | Ano: %d | Vilões: %s",
-                titulo, editora, paginas, ano, viloes
-        );
+        return
+                "Título: " + titulo +
+                "\nAno: " + anoDeLancamento +
+                "\nPáginas: " + numeroDePaginas;
     }
 }
