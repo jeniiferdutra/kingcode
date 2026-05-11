@@ -40,6 +40,7 @@ public class Livro {
         return
                 "Título: " + titulo +
                 "\nAno: " + anoDeLancamento +
-                "\nPáginas: " + numeroDePaginas;
+                "\nPáginas: " + numeroDePaginas +
+                "\n---------------------------------------";
     }
 }

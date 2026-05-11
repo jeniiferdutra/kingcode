@@ -1,32 +1,76 @@
 package br.com.jeniferocha.kingcode.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.List;
+public class Vilao {
+    private String nome;
+    private String urlDetalhes;
+    private String genero;
+    private String status;
+    private List<DadosLivro> tituloLivro;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public record Vilao(
-        @JsonAlias("name") String nome,
-        @JsonAlias("url") String urlDetalhes,
-        @JsonAlias("gender") String genero,
-        @JsonAlias("status") String status,
-        @JsonAlias("books") List<VilaoLivro> tituloLivro
-        ) {
+    public Vilao(DadosVilao dadosVilao) {
+        this.nome = dadosVilao.nome();
+        this.urlDetalhes = dadosVilao.urlDetalhes();
+        this.genero = dadosVilao.genero();
+        this.status = dadosVilao.status();
+        this.tituloLivro = dadosVilao.tituloLivro();
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getUrlDetalhes() {
+        return urlDetalhes;
+    }
+
+    public void setUrlDetalhes(String urlDetalhes) {
+        this.urlDetalhes = urlDetalhes;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<DadosLivro> getTituloLivro() {
+        return tituloLivro;
+    }
+
+    public void setTituloLivro(List<DadosLivro> tituloLivro) {
+        this.tituloLivro = tituloLivro;
+    }
 
     @Override
     public String toString() {
-        // Se gênero for nulo, significa que é o resumo que vem na lista de livros
         if (genero == null) {
             return nome;
         }
 
-        // Se gênero existir, é a ficha completa da Opção 4
-        String nomeLivro = (tituloLivro != null && !tituloLivro.isEmpty())
-                ? tituloLivro.get(0).tituloLivroVilao()
+        String obraPrincipal = (tituloLivro != null && !tituloLivro.isEmpty())
+                ? tituloLivro.get(0).titulo()
                 : "Obra não mapeada";
 
-        return String.format("\n   > Ficha do Vilão: %s\n   > Gênero: %s | Status: %s\n   > Aparição Principal: %s",
-                nome, genero, status, nomeLivro);
+        return String.format("""
+           
+           > Ficha do Vilão: %s 
+           > Gênero: %s | Status: %s
+           > Aparição Principal: %s""",
+                nome, genero, status, obraPrincipal);
     }
 }

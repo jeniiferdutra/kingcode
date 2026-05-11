@@ -111,24 +111,30 @@ public class Main {
         System.out.println("Digite o nome do vilão:");
         var nomeVilao = leitura.nextLine();
 
-        // 1. Primeiro, achamos o vilão "resumido" na lista de livros
-//        var vilaoResumo = livros.stream()
-//                .filter(l -> l.viloes() != null)
-//                .flatMap(l -> l.viloes().stream())
-//                .filter(v -> v.nome().toLowerCase().contains(nomeVilao.toLowerCase()))
-//                .findFirst(); // o primeiro que encontrar
-//
-//        if (vilaoResumo.isPresent()) {
-//            // 2. Usamos a URL que veio no resumo para buscar os detalhes reais
-//            var url = vilaoResumo.get().urlDetalhes();
-//            var json = consumo.obterDados(url);
-//            var resposta = conversor.obterDados(json, RespostaVilao.class);
-//
-//            // 3. Agora temos o vilão com Gênero e Status preenchidos!
-//            System.out.println("\n--- Ficha Completa do Vilão ---");
-//            System.out.println(resposta.vilao());
-//        } else {
-//            System.out.println("Vilão não encontrado no Macroverso.");
-//        }
+        // 1. Buscamos todos os livros para encontrar o resumo do vilão (com a URL de detalhes)
+        var jsonLivros = consumo.obterDados(ENDERECO);
+        var respostaLivros = conversor.obterDados(jsonLivros, RespostaAPI.class);
+
+        var vilaoResumo = respostaLivros.dadosLivroList().stream()
+                .filter(l -> l.viloes() != null)
+                .flatMap(l -> l.viloes().stream())
+                .filter(v -> v.nome().toLowerCase().contains(nomeVilao.toLowerCase()))
+                .findFirst();
+
+        if (vilaoResumo.isPresent()) {
+            var url = vilaoResumo.get().urlDetalhes();
+            var jsonDetalhe = consumo.obterDados(url);
+
+            // Aqui usamos o DadosVilao (Record) para capturar o JSON
+            var resposta = conversor.obterDados(jsonDetalhe, RespostaVilao.class);
+
+            // Convertemos para o objeto Vilao (Classe) para usar o toString formatado
+            Vilao vilaoCompleto = new Vilao(resposta.dadosVilao());
+
+            System.out.println("\n--- Ficha Completa do Vilão ---");
+            System.out.println(vilaoCompleto);
+        } else {
+            System.out.println("Vilão não encontrado no Macroverso.");
+        }
     }
 }

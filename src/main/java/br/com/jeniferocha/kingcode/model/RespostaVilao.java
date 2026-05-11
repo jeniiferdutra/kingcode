@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 // Lista de objeto de vilão
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record RespostaVilao(
-        @JsonAlias("data") Vilao vilao
+        @JsonAlias("data") DadosVilao dadosVilao
 ) {}
