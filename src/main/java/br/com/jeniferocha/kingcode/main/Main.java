@@ -1,11 +1,11 @@
 package br.com.jeniferocha.kingcode.main;
 
 import br.com.jeniferocha.kingcode.model.*;
+import br.com.jeniferocha.kingcode.repository.KingRepository;
 import br.com.jeniferocha.kingcode.service.ConsumoAPI;
 import br.com.jeniferocha.kingcode.service.ConverteDados;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -18,6 +18,12 @@ public class Main {
     private ConverteDados conversor = new ConverteDados();
 
     private final String ENDERECO = "https://stephen-king-api.onrender.com/api/books";
+
+    private KingRepository repositorio;
+
+    public Main(KingRepository repositorio) {
+        this.repositorio = repositorio;
+    }
 
     public void buscarLivro() {
         int opcaoMenu = -1;
@@ -66,6 +72,7 @@ public class Main {
 
         if (dados != null) {
             Livro livro = new Livro(dados);
+            repositorio.save(livro);
             System.out.println(livro);
         } else {
             System.out.println("Livro não encontrado.");
@@ -124,11 +131,8 @@ public class Main {
         if (vilaoResumo.isPresent()) {
             var url = vilaoResumo.get().urlDetalhes();
             var jsonDetalhe = consumo.obterDados(url);
-
-            // Aqui usamos o DadosVilao (Record) para capturar o JSON
             var resposta = conversor.obterDados(jsonDetalhe, RespostaVilao.class);
 
-            // Convertemos para o objeto Vilao (Classe) para usar o toString formatado
             Vilao vilaoCompleto = new Vilao(resposta.dadosVilao());
 
             System.out.println("\n--- Ficha Completa do Vilão ---");

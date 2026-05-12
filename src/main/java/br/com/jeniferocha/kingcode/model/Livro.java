@@ -1,9 +1,27 @@
 package br.com.jeniferocha.kingcode.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "livros")
 public class Livro {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(unique = true)
+
     private String titulo;
     private Integer anoDeLancamento;
     private Integer numeroDePaginas;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Livro(DadosLivro dados) {
         this.titulo = dados.titulo();
