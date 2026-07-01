@@ -23,6 +23,8 @@ public class Livro {
         this.id = id;
     }
 
+    public Livro(){}
+
     public Livro(DadosLivro dados) {
         this.titulo = dados.titulo();
         this.anoDeLancamento = dados.anodeLancamento();
