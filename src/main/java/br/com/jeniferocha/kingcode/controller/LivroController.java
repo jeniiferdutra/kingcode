@@ -16,9 +16,8 @@ public class LivroController {
 
     @GetMapping("/books") // -> Cria a rota na URL.
     public List<LivroDTO> obterTodosOsLivros() {
-        return service.findAll()
-                .stream()
-                .map(l -> new LivroDTO(l.getId(), l.getTitulo(), l.getAnoDeLancamento(), l.getNumeroDePaginas()))
-                .collect(Collectors.toList());
+        return service.findAll().stream()
+                .map(LivroDTO::new)
+                .toList();
     }
 }

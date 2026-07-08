@@ -77,7 +77,7 @@ public class Main {
         livros = service.findAll();
 
         if (livros.isEmpty()) {
-            System.out.println("Nenhum livro salvo no seu banco de dados ainda. Use a Opção 1 para cadastrar!");
+            System.out.println("Nenhum livro salvo no seu banco de dados. Use a Opção 1 para cadastrar!");
         } else {
             livros.stream()
                     .sorted(Comparator.comparing(Livro::getTitulo))// ordem alfabética
@@ -90,13 +90,9 @@ public class Main {
         var anoLancamento = leitura.nextInt();
         leitura.nextLine();
 
-        var json = consumo.obterDados(ENDERECO);
-        var resposta = conversor.obterDados(json, RespostaAPI.class);
+        // busca direto do banco através do service
+        List<Livro> livrosEncontrados = service.buscarPorAno(anoLancamento);
 
-        List<Livro> livrosEncontrados = resposta.dadosLivroList().stream()
-                .map(Livro::new)// converte o "pacote" da API para um objeto Livro com novas regras/formataçoes
-                .filter(l -> l.getAnoDeLancamento() != null && l.getAnoDeLancamento().equals(anoLancamento))
-                .toList();
         System.out.println("\n--- Livros lançados em " + anoLancamento + " ---");
 
         if (livrosEncontrados.isEmpty()) {

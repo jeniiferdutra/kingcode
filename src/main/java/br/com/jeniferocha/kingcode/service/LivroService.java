@@ -50,4 +50,9 @@ public class LivroService {
                 .findFirst()
                 .orElse(null);
     }
+
+    public List<Livro> buscarPorAno(Integer ano) {
+        // service delega a busca filtrada para o repository
+        return repositorio.findByAnoDeLancamento(ano);
+    }
 }

@@ -10,5 +10,7 @@ import java.util.List;
 public record DadosLivro(@JsonAlias({"Title", "title"}) String titulo,
                          @JsonAlias("Year") Integer anodeLancamento,
                          @JsonAlias("Pages") Integer numeroDePaginas,
-                        @JsonAlias("villains") List<DadosVilao> viloes) {
+                         @JsonAlias("villains") List<DadosVilao> viloes,
+                         @JsonAlias("Publisher") String editora,
+                         @JsonAlias("ISBN") String isbn) {
 }
