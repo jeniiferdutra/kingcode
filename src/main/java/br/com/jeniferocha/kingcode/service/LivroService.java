@@ -55,4 +55,8 @@ public class LivroService {
         // service delega a busca filtrada para o repository
         return repositorio.findByAnoDeLancamento(ano);
     }
+
+    public List<Livro> buscarLivrosPorVilao(String nomeVilao) {
+        return repositorio.findByViloesContainingIgnoreCase(nomeVilao);
+    }
 }

@@ -8,4 +8,7 @@ import java.util.List;
 public interface KingRepository extends JpaRepository<Livro, Long> {
     // busca os livros pelo ano de lançamento exato
     List<Livro> findByAnoDeLancamento(Integer anoDeLancamento);
+
+    // busca livros onde a lista de vilões contém o nome digitado
+    List<Livro> findByViloesContainingIgnoreCase(String nomeVilao);
 }
