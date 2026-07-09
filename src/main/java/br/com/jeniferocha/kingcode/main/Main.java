@@ -1,8 +1,6 @@
 package br.com.jeniferocha.kingcode.main;
 
 import br.com.jeniferocha.kingcode.model.*;
-import br.com.jeniferocha.kingcode.service.ConsumoAPI;
-import br.com.jeniferocha.kingcode.service.ConverteDados;
 import br.com.jeniferocha.kingcode.service.LivroService;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +11,6 @@ import java.util.Scanner;
 @Component
 public class Main {
     private Scanner leitura = new Scanner(System.in);
-    private ConsumoAPI consumo = new ConsumoAPI();
-    private ConverteDados conversor = new ConverteDados();
-    private final String ENDERECO = "https://stephen-king-api.onrender.com/api/books";
 
     private LivroService service;
     private List<Livro> livros;
@@ -106,7 +101,6 @@ public class Main {
         System.out.println("Digite o nome do vilão:");
         var nomeVilao = leitura.nextLine();
 
-        // 🟢 Busca direto do banco local através do Service!
         List<Livro> livrosComOVilao = service.buscarLivrosPorVilao(nomeVilao);
 
         if (livrosComOVilao.isEmpty()) {
