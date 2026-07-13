@@ -1,6 +1,7 @@
 package br.com.jeniferocha.kingcode;
 
 import br.com.jeniferocha.kingcode.main.Main;
+import br.com.jeniferocha.kingcode.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +13,9 @@ public class KingcodeApplication implements CommandLineRunner {
 	public static void main(String[] args) {
 		SpringApplication.run(KingcodeApplication.class, args);
 	}
+
+	@Autowired
+	private LivroService service;
 
 	@Autowired
 	private Main main;
