@@ -17,9 +17,11 @@ public class KingcodeApplication implements CommandLineRunner {
 	@Autowired
 	private LivroService service;
 
+	@Autowired
+	private Main main;
+
 	@Override
 	public void run(String... args) throws Exception {
-		Main main = new Main(service);
 		main.buscarLivro();
 	}
 }

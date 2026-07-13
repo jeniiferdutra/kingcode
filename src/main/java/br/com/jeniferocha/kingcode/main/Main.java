@@ -22,7 +22,7 @@ public class Main {
     public void buscarLivro() {
         int opcaoMenu = -1;
 
-        while(opcaoMenu != 0) {
+        while(opcaoMenu != 5) {
             exibirOpcoes();
             opcaoMenu = leitura.nextInt();
             leitura.nextLine();
